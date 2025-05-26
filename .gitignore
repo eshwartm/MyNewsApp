@@ -1,0 +1,87 @@
+# Xcode
+#
+## Build generated
+MyNewsApp/build/
+MyNewsApp/DerivedData/
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+MyNewsApp/xcuserdata/
+MyNewsApp/*.xcodeproj/xcuserdata/
+MyNewsApp/*.xcworkspace/xcuserdata/
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+MyNewsApp/*.xcworkspace/
+!MyNewsApp/MyNewsApp.xcworkspace/
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+.swiftpm/
+
+# CocoaPods
+MyNewsApp/Pods/
+MyNewsApp/Podfile.lock
+
+# Carthage
+MyNewsApp/Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Xcode per-user config
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+MyNewsApp/*.xcodeproj/xcuserdata/
+MyNewsApp/*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Generated files
+*.o
+*.pyc
+*.hi
+
+# Project files
+MyNewsApp/*.xcodeproj/project.xcworkspace/xcshareddata/*
+!MyNewsApp/*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+!MyNewsApp/*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
