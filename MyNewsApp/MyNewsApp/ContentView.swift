@@ -6,56 +6,89 @@
 //
 
 import SwiftUI
-import SwiftData
+
+enum NewsTab: String, CaseIterable, Identifiable {
+    case everything = "Everything"
+    case topHeadlines = "Top Headlines"
+    
+    var id: String { self.rawValue }
+}
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @StateObject var viewModel = NewsListViewModel()
+    @State private var selectedTab: NewsTab = .everything
+    @State private var queryString: String = ""
+    
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+            VStack(spacing: 2) {
+                HStack {
+                    ForEach(NewsTab.allCases) { tab in
+                        VStack(spacing: 4) {
+                            Text(tab.rawValue)
+                                .font(.headline)
+                                .foregroundStyle(selectedTab == tab ? .blue : .gray)
+                                .onTapGesture {
+                                    selectedTab = tab
+                                    
+                                    if selectedTab == NewsTab.everything {
+                                        Task {
+                                            await viewModel.makeNetworkRequestForEverything()
+                                        }
+                                    } else {
+                                        Task {
+                                            await viewModel.makeNetworkRequestForTopHeadlines()
+                                        }
+                                    }
+                                }
+                            
+                            Rectangle()
+                                .frame(height: 2)
+                                .foregroundStyle(selectedTab == tab ? .blue : .clear)
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+            
+            if selectedTab == .everything {
+                VStack {
+                    TextField("Search...", text: $queryString)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                    if let newsList = viewModel.newsList {
+                        List(newsList, id: \.id) { news in
+                            Text(news.title)
+                        }
+                        .navigationTitle("News")
                     }
+                    else {
+                        ProgressView("Loading news...")
+                            .navigationTitle("News")
+                    }
+                }
+                .navigationTitle("Everything")
+            } else if selectedTab == .topHeadlines {
+                if let newsList = viewModel.newsList {
+                    List(newsList, id: \.id) { news in
+                        Text(news.title)
+                    }
+                    .navigationTitle("News")
+                }
+                else {
+                    ProgressView("Loading news...")
+                        .navigationTitle("News")
                 }
             }
         } detail: {
             Text("Select an item")
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+        .task {
+            await viewModel.makeNetworkRequestForEverything(query: queryString)
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
