@@ -85,3 +85,7 @@ MyNewsApp/*.xcodeproj/project.xcworkspace/xcuserdata/
 MyNewsApp/*.xcodeproj/project.xcworkspace/xcshareddata/*
 !MyNewsApp/*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 !MyNewsApp/*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+
+# Configuration files
+Config.xcconfig
+*.xcconfig
